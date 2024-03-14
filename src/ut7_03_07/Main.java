@@ -1,13 +1,16 @@
 package ut7_03_07;
+import java.io.*;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-    private static final Map<String, Empresa> empresas = new LinkedHashMap<>();
+    private static Map<String, Empresa> empresas = new LinkedHashMap<>();
     private static final Scanner s = new Scanner(System.in);
 
     public static void main(String[] args) {
+        empresas = cargarDirectorio("empresas.dat");
         mostrarMenu();
     }
 
@@ -22,7 +25,7 @@ public class Main {
             System.out.println("3. Alta de una nueva empresa: ");
             System.out.println("4. Baja de una empresa por CIF: ");
             System.out.println("5. Modificiación de una empresa por CIF: ");
-            System.out.println("0. Salir ");
+            System.out.println("0. Guardar y salir ");
             System.out.println(" ");
             System.out.println("Selecciona una opción: ");
             opcion = s.nextInt();
@@ -45,6 +48,7 @@ public class Main {
                     System.out.println("Introduce un CIF (Primera letra en Mayúscula (excepto I, O, X, Y, Z) y 7 digitos: ");
                     String altaCif = s.nextLine();
                     altaEmpresa(altaCif);
+                    guardarDirectorio("empresas.dat");
                     System.out.println(" ");
                     break;
 
@@ -52,6 +56,7 @@ public class Main {
                     System.out.println("Introduzca el CIF de la empresa: ");
                     String bajaCif = s.nextLine();
                     bajaEmpresa(bajaCif);
+                    guardarDirectorio("empresas.dat");
                     System.out.println(" ");
                     break;
 
@@ -60,10 +65,12 @@ public class Main {
                     String modificarCif = s.nextLine();
                     empresas.get(modificarCif);
                     menuModificacion(modificarCif);
+                    guardarDirectorio("empresas.dat");
                     System.out.println(" ");
                     break;
 
                 case 0:
+                    guardarDirectorio("empresas.dat");
                     System.out.println("Guardando y saliendo del programa. ");
                     break;
 
@@ -110,6 +117,23 @@ public class Main {
         System.out.println("Introduce un nombre de contacto: ");
         String nombreContacto = s.nextLine();
         return new Empresa(razonSocial, telefono, anioConstitucion, nombreContacto);
+    }
+
+    private static void guardarDirectorio(String nombreArchivo) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
+            oos.writeObject(empresas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static HashMap<String, Empresa>  cargarDirectorio(String nombreArchivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
+            return (HashMap<String, Empresa>) ois.readObject();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return new HashMap<String, Empresa>();
+        }
     }
 
     private static void buscarEmpresa(String buscarCif) {
