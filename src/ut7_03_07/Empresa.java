@@ -1,9 +1,7 @@
 package ut7_03_07;
-
 import java.io.Serializable;
 
 public class Empresa implements Serializable {
-    private String cif;
     private String razonSocial;
     private String telefono;
     private int anioConstitucion;
@@ -50,7 +48,7 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "Empresa: " +  razonSocial + ", constituida en el año " + anioConstitucion + ", cuya persona de contacto es: " + nombreContacto + " y su teléfono es: " + telefono;
+        return "Empresa: " +  getRazonSocial() + ", constituida en el año " + getAnioConstitucion() + ", cuya persona de contacto es: " + getNombreContacto() + " y su teléfono es: " + getTelefono();
     }
 
 

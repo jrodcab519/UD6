@@ -1,5 +1,4 @@
 package ut7_03_07;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -11,6 +10,8 @@ public class Main {
     public static void main(String[] args) {
         mostrarMenu();
     }
+
+
 
     public static void mostrarMenu() {
         int opcion;
@@ -41,7 +42,7 @@ public class Main {
                     break;
 
                 case 3:
-                    System.out.println("Introduce un CIF: ");
+                    System.out.println("Introduce un CIF (Primera letra en Mayúscula (excepto I, O, X, Y, Z) y 7 digitos: ");
                     String altaCif = s.nextLine();
                     altaEmpresa(altaCif);
                     System.out.println(" ");
@@ -63,7 +64,7 @@ public class Main {
                     break;
 
                 case 0:
-                    System.out.println("Saliendo del programa. ");
+                    System.out.println("Guardando y saliendo del programa. ");
                     break;
 
                 default:
@@ -72,6 +73,7 @@ public class Main {
             }
         } while (opcion != 0);
     }
+
 
     private static void bajaEmpresa(String bajaCif) {
         if (empresas.containsKey(bajaCif)) {
@@ -83,6 +85,13 @@ public class Main {
     }
 
     public static void altaEmpresa(String altaCif) {
+        validarCIF(altaCif);
+        if (validarCIF(altaCif)) {
+            System.out.println("El CIF es válido.");
+        } else {
+            System.out.println("El CIF no es válido. Pruebe de nuevo");
+            altaEmpresa(s.nextLine());
+        }
         if (empresas.containsKey(altaCif)) {
             System.out.println("El CIF proporcionado ya existe.");
         } else {
@@ -115,6 +124,28 @@ public class Main {
         for (Empresa empresa : empresas.values()) {
             System.out.println(empresa);
         }
+    }
+
+    private static boolean validarCIF(String cif) {
+
+        if (cif.length() != 8)
+            return false;
+
+        char primeraLetra = cif.charAt(0);
+
+        if (!(primeraLetra >= 'A' && primeraLetra <= 'H') &&
+                !(primeraLetra >= 'J' && primeraLetra <= 'N') &&
+                !(primeraLetra >= 'P' && primeraLetra <= 'T') &&
+                !(primeraLetra == 'W')) {
+            return false;
+        }
+
+        for (int i = 1; i < 8; i++) {
+            char caracter = cif.charAt(i);
+            if (!Character.isDigit(caracter))
+                return false;
+        }
+        return true;
     }
 
     public static void menuModificacion(String cif) {
